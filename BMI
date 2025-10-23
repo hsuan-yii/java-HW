@@ -1,0 +1,64 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class BMI extends JFrame implements ActionListener{
+    private JTextField weightField, heightField;
+    private JButton calcButton, clearButton;
+
+    public BMI(){
+        setTitle("Dope BMI Calculation");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 200);
+
+        JPanel p1 = new JPanel(new FlowLayout());
+        p1.add(new JLabel("Weight(kg):"));
+        weightField = new JTextField(10);
+        p1.add(weightField);
+
+        JPanel p2 = new JPanel(new FlowLayout());
+        p2.add(new JLabel("Height(cm):"));
+        heightField = new JTextField(10);
+        p2.add(heightField);
+
+        JPanel p3 = new JPanel(new FlowLayout());
+        calcButton = new JButton("Calculate");
+        clearButton = new JButton("Clear");
+        p3.add(calcButton);
+        p3.add(clearButton);
+
+        Container c = getContentPane();
+        c.setLayout(new BoxLayout(c, BoxLayout.Y_AXIS));
+        c.add(p1);
+        c.add(p2);
+        c.add(p3);
+
+        calcButton.addActionListener(this);
+        clearButton.addActionListener(e -> {
+            weightField.setText("");
+            heightField.setText("");
+        });
+    }
+    @Override
+    public void actionPerformed(ActionEvent e){
+        try{
+            double weight = Double.parseDouble(weightField.getText());
+            double height = Double.parseDouble(heightField.getText()) / 100;
+            double bmi = weight / (height * height);
+
+            String result;
+            if(bmi < 18.5) result = "Underweight";
+            else if(bmi < 24.9) result = "Normal";
+            else if(bmi < 29.9) result = "Overweight";
+            else result = "Obese";
+
+            JOptionPane.showMessageDialog(this, String.format("BMI=%.2f %s", bmi, result));
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(this, "Invalid input!");
+        }
+    }
+    public static void main(String[] args){
+        new BMI().setVisible(true);
+    }
+}
